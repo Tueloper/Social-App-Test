@@ -12,14 +12,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Tueloper/Social-App-Test.git"
+		"url": "git+https://github.com/Tueloper/Social-app-test.git"
 	},
 	"author": "Tochukwu Ozurumba",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/Tueloper/Social-App-Test/issues"
+		"url": "https://github.com/Tueloper/Social-app-test/issues"
 	},
-	"homepage": "https://github.com/Tueloper/Social-App-Test#readme",
+	"homepage": "https://github.com/Tueloper/Social-app-test#readme",
 	"dependencies": {
 		"@babel/polyfill": "^7.12.1",
 		"bcryptjs": "^2.4.3",
