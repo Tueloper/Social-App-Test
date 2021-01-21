@@ -32,6 +32,7 @@
 		"datauri": "^3.0.0",
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
+		"express-form-data": "^2.0.14",
 		"jsonwebtoken": "^8.5.1",
 		"mongodb": "^3.6.3",
 		"mongoose": "^5.11.13",

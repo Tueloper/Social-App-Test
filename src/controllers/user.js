@@ -10,7 +10,7 @@ module.exports = {
 			let userCheck = await User.findOne({ email });
 			if (!userCheck) userCheck = await User.findOne({ username });
 			if (userCheck) {
-				throw new Error("message: 'Email/Username already in use'");
+        return response.status(400).json({ message: 'Email/Username already in use' });
 			}
 			const user = new User({
 				fullname,
@@ -25,20 +25,22 @@ module.exports = {
 			response.cookie('token', token, { maxAge: 70000000, httpOnly: true });
 			return response.header('x-auth-token', token).status(201).json({ message: 'Success', user });
 		} catch (e) {
-			response.status(500).json(e.message);
+      return response.status(500).json({ message: e.message });
 		}
 	},
 
 	async loginUser(request, response) {
 		try {
+      console.log(request.body);
+      return request.body;
 			const { email, password } = request.body;
 			const user = await User.findOne({ email });
 			if (!user) {
-				throw new Error('You are not Authorised');
+				return response.status(401).json({ message: 'Authentication failed!' });
 			}
 			const passwordMatch = await compareHash(password, user.password);
 			if (!passwordMatch) {
-				throw new Error('Invalid Password');
+				return response.status(401).json({ message: 'Invalid password!' });
 			}
 			user.lastLogin = Date.now();
 			await user.save();
@@ -46,7 +48,7 @@ module.exports = {
 			response.cookie('token', token, { maxAge: 70000000, httpOnly: true });
 			return response.header('x-auth-token', token).status(201).json({ token });
 		} catch (e) {
-			response.status(500).json(e.message);
+			return response.status(500).json({ message: e.message });
 		}
 	},
 
@@ -60,9 +62,9 @@ module.exports = {
 			userProfile.tokens = [];
 			await userProfile.save();
 			response.cookie('token', '', { maxAge: 0, httpOnly: true });
-			return response.status(200).send({});
+			return response.status(200).send({ message: 'successful'});
 		} catch (e) {
-			response.status(400).send(e.message);
+			return response.status(500).json({ message: e.message});
 		}
 	},
 
@@ -80,7 +82,7 @@ module.exports = {
 				updatedUser.image_public_id = imageUrl.public_id;
 
 				await updatedUser.save();
-				response.status(201).send({ updatedUser });
+				return response.status(201).send({ updatedUser });
 			} else {
 				const imageUrl = await cloudinaryImage(request.file);
 
@@ -88,10 +90,10 @@ module.exports = {
 				updatedUser.image_public_id = imageUrl.public_id;
 
 				await updatedUser.save();
-				response.status(201).send({ updatedUser });
+				return response.status(201).send({ updatedUser });
 			}
 		} catch (err) {
-			response.status(400).send(err);
+			return response.status(err.status).json({ message: err.message });
 		}
 	},
 
@@ -103,13 +105,13 @@ module.exports = {
 
 		//Prompt invalid order inputs
 		if (!isValid) {
-			return response.status(404).send(' Error: Invalid Order Input ');
+			return response.status(404).json({ message: 'Invalid inputs' });
 		}
 		//Send valid data for update
 		try {
 			const updatedUser = request.user;
 			if (!updatedUser) {
-				return response.status(404).send('User not Found');
+				return response.status(400).json({ message: 'User not found!' });
 			}
 
 			updates.forEach((update) => (updatedUser[update] = request.body[update]));
@@ -117,7 +119,7 @@ module.exports = {
 			await updatedUser.save();
 
 			return response.status(201).send({
-				Message: 'Update Successful',
+				'message': 'Update Successful',
 				updatedUser
 			});
 		} catch (e) {
