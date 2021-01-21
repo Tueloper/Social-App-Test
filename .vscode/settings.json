@@ -1,0 +1,18 @@
+{
+  "workbench.iconTheme": "vscode-icons",
+  "workbench.colorTheme": "Night Owl",
+  "terminal.integrated.shell.windows": "C:\\Users\\tozurumba\\AppData\\Local\\Programs\\Git\\bin\\bash.exe",
+  "window.zoomLevel": -1,
+  "files.autoSave": "afterDelay",
+  "editor.codeActionsOnSave": null,
+  "editor.fontWeight": 500,
+  "editor.tabSize": 2,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "editor.fontLigatures": null,
+  "tabnine.experimentalAutoImports": true,
+  "editor.fontSize": 12.9,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "terminal.integrated.sendKeybindingsToShell": true,
+  "editor.rulers": [
+  ],
+}

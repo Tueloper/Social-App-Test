@@ -1,0 +1,54 @@
+{
+	"name": "social-app-backend",
+	"version": "1.0.0",
+	"description": "The backend repository for social app test.",
+	"main": "index.js",
+	"scripts": {
+		"start": "node dist/index.js",
+		"dev": "nodemon src/index.js --ignore tests",
+		"heroku-postbuild": "npm run build",
+		"build": "babel src -d dist",
+		"test": "mocha --timeout 10000 'tests/**/*.js'"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Tueloper/Social-App-Test.git"
+	},
+	"author": "Tochukwu Ozurumba",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Tueloper/Social-App-Test/issues"
+	},
+	"homepage": "https://github.com/Tueloper/Social-App-Test#readme",
+	"dependencies": {
+		"@babel/polyfill": "^7.12.1",
+		"bcryptjs": "^2.4.3",
+		"body-parser": "^1.19.0",
+		"chai": "^4.2.0",
+		"chai-http": "^4.3.0",
+		"chalk": "^4.1.0",
+		"cloudinary": "^1.23.0",
+		"cors": "^2.8.5",
+		"datauri": "^3.0.0",
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
+		"jsonwebtoken": "^8.5.1",
+		"mongodb": "^3.6.3",
+		"mongoose": "^5.11.13",
+		"morgan": "^1.10.0",
+		"multer": "^1.4.2",
+		"nodemailer": "^6.4.17",
+		"sharp": "^0.27.0"
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.12.10",
+		"@babel/core": "^7.12.10",
+		"@babel/node": "^7.12.10",
+		"@babel/preset-env": "^7.12.11",
+		"@babel/register": "^7.12.1",
+		"nodemon": "^2.0.7"
+	},
+	"engines": {
+		"node": "10.x"
+	}
+}
