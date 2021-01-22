@@ -5,8 +5,8 @@ const { successResponse, errorResponse } = require('./../utils/toolbox');
 const { cloudinaryImage, destroyCloudinaryImage } = require('./../services/Cloudinary');
 
 module.exports = {
-	async CreateUser(req, response) {
-		const { password, fullname, email, username } = req.body;
+	async CreateUser(request, response) {
+		const { password, fullname, email, username } = request.body;
 		try {
 			let userCheck = await User.findOne({ email });
 			if (!userCheck) userCheck = await User.findOne({ username });
@@ -21,7 +21,6 @@ module.exports = {
 			});
 			const token = await generateAuthToken(user);
 			await hash(user);
-
 			await user.save();
 			response.cookie('token', token, { maxAge: 70000000, httpOnly: true });
 			return response.header('x-auth-token', token).status(201).json({ message: 'Success', user });
@@ -30,7 +29,7 @@ module.exports = {
 		}
 	},
 
-	async loginUser(req, response) {
+	async loginUser(request, response) {
 		try {
       // console.log(request.body);
       // return request.body;
@@ -53,13 +52,13 @@ module.exports = {
 		}
 	},
 
-	async getUser(req, response) {
-		response.json(req.user);
+	async getUser(request, response) {
+		response.json(request.user);
 	},
 
-	async userLogout(req, response) {
+	async userLogout(request, response) {
 		try {
-			const userProfile = req.user;
+			const userProfile = request.user;
 			userProfile.tokens = [];
 			await userProfile.save();
 			response.cookie('token', '', { maxAge: 0, httpOnly: true });
@@ -69,15 +68,15 @@ module.exports = {
 		}
 	},
 
-	async uploadImage(req, response) {
+	async uploadImage(request, response) {
 		try {
-			const updatedUser = req.user;
+			const updatedUser = request.user;
 			// return console.log(updatedUser);
 			if (!updatedUser) {
 				return response.status(404).send('User Not Found');
 			} else if (updatedUser.image_url) {
 				// return console.log(true);
-				const imageUrl = await destroyCloudinaryImage(req.file, updatedUser.image_public_id);
+				const imageUrl = await destroyCloudinaryImage(request.file, updatedUser.image_public_id);
 
 				updatedUser.image_url = imageUrl.secure_url;
 				updatedUser.image_public_id = imageUrl.public_id;
@@ -85,7 +84,7 @@ module.exports = {
 				await updatedUser.save();
 				return response.status(201).send({ updatedUser });
 			} else {
-				const imageUrl = await cloudinaryImage(req.file);
+				const imageUrl = await cloudinaryImage(request.file);
 
 				updatedUser.image_url = imageUrl.secure_url;
 				updatedUser.image_public_id = imageUrl.public_id;
@@ -98,9 +97,9 @@ module.exports = {
 		}
 	},
 
-	async updatedUser(req, response) {
+	async updatedUser(request, response) {
 		//setting up validation for the keys to be updated
-		const updates = Object.keys(req.body);
+		const updates = Object.keys(request.body);
 		const allowable = [ 'fullname', 'phone', 'address', 'email' ];
 		const isValid = updates.every((update) => allowable.includes(update));
 
@@ -110,12 +109,12 @@ module.exports = {
 		}
 		//Send valid data for update
 		try {
-			const updatedUser = req.user;
+			const updatedUser = request.user;
 			if (!updatedUser) {
 				return response.status(400).json({ message: 'User not found!' });
 			}
 
-			updates.forEach((update) => (updatedUser[update] = req.body[update]));
+			updates.forEach((update) => (updatedUser[update] = request.body[update]));
 
 			await updatedUser.save();
 
