@@ -36,11 +36,11 @@ module.exports = {
 			const { email, password } = request.body;
 			const user = await User.findOne({ email });
 			if (!user) {
-				return response.status(401).json({ message: 'Authentication failed!' });
+				return response.status(401).json({ message: 'Invalid email/password!' });
 			}
 			const passwordMatch = await compareHash(password, user.password);
 			if (!passwordMatch) {
-				return response.status(401).json({ message: 'Invalid password!' });
+				return response.status(401).json({ message: 'Invalid email/password!' });
 			}
 			user.lastLogin = Date.now();
 			await user.save();
@@ -67,6 +67,18 @@ module.exports = {
 			return response.status(500).json({ message: e.message});
 		}
 	},
+
+	async updateProfilePic (request, response) {
+		try{
+			const user = request.user;
+			user.profilePicture = request.body.profilePicture
+			await user.save();
+			return response.status(200).json({ message: 'Profile picture added successfully', user });
+		} catch (e) {
+			return response.status(500).json({ message: e.message});
+		}
+	},
+
 
 	async uploadImage(request, response) {
 		try {
