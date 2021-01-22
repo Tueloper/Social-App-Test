@@ -7,6 +7,7 @@ const cors = require('cors');
 const router = require('./routers/index');
 const User = require('./routers/user');
 const Post = require('./routers/post');
+const Like = require('./routers/like');
 const chalk = require('chalk');
 
 dotenv.config();
@@ -26,7 +27,7 @@ app.use(express.urlencoded()); //Parse URL-encoded bodies
 app.use(cors());
 
 // app.use('/', router);
-app.use('/v1.0/api', [ User, Post ]);
+app.use('/v1.0/api', [ User, Post, Like ]);
 
 mongoose.connect(
 	process.env.DATABASE_URL,

@@ -1,11 +1,12 @@
 const User = require('./../models/user');
 const generateAuthToken = require('./../utils/generateToken');
 const { hash, compareHash } = require('./../utils/hash');
+const { successResponse, errorResponse } = require('./../utils/toolbox');
 const { cloudinaryImage, destroyCloudinaryImage } = require('./../services/Cloudinary');
 
 module.exports = {
-	async CreateUser(request, response) {
-		const { password, fullname, email, username } = request.body;
+	async CreateUser(req, response) {
+		const { password, fullname, email, username } = req.body;
 		try {
 			let userCheck = await User.findOne({ email });
 			if (!userCheck) userCheck = await User.findOne({ username });
@@ -29,10 +30,10 @@ module.exports = {
 		}
 	},
 
-	async loginUser(request, response) {
+	async loginUser(req, response) {
 		try {
-      console.log(request.body);
-      return request.body;
+      // console.log(request.body);
+      // return request.body;
 			const { email, password } = request.body;
 			const user = await User.findOne({ email });
 			if (!user) {
@@ -52,13 +53,13 @@ module.exports = {
 		}
 	},
 
-	async getUser(request, response) {
-		response.json(request.user);
+	async getUser(req, response) {
+		response.json(req.user);
 	},
 
-	async userLogout(request, response) {
+	async userLogout(req, response) {
 		try {
-			const userProfile = request.user;
+			const userProfile = req.user;
 			userProfile.tokens = [];
 			await userProfile.save();
 			response.cookie('token', '', { maxAge: 0, httpOnly: true });
@@ -68,15 +69,15 @@ module.exports = {
 		}
 	},
 
-	async uploadImage(request, response) {
+	async uploadImage(req, response) {
 		try {
-			const updatedUser = request.user;
+			const updatedUser = req.user;
 			// return console.log(updatedUser);
 			if (!updatedUser) {
 				return response.status(404).send('User Not Found');
 			} else if (updatedUser.image_url) {
 				// return console.log(true);
-				const imageUrl = await destroyCloudinaryImage(request.file, updatedUser.image_public_id);
+				const imageUrl = await destroyCloudinaryImage(req.file, updatedUser.image_public_id);
 
 				updatedUser.image_url = imageUrl.secure_url;
 				updatedUser.image_public_id = imageUrl.public_id;
@@ -84,7 +85,7 @@ module.exports = {
 				await updatedUser.save();
 				return response.status(201).send({ updatedUser });
 			} else {
-				const imageUrl = await cloudinaryImage(request.file);
+				const imageUrl = await cloudinaryImage(req.file);
 
 				updatedUser.image_url = imageUrl.secure_url;
 				updatedUser.image_public_id = imageUrl.public_id;
@@ -93,13 +94,13 @@ module.exports = {
 				return response.status(201).send({ updatedUser });
 			}
 		} catch (err) {
-			return response.status(err.status).json({ message: err.message });
+			return response.status(500).json({ message: err.message });
 		}
 	},
 
-	async updatedUser(request, response) {
+	async updatedUser(req, response) {
 		//setting up validation for the keys to be updated
-		const updates = Object.keys(request.body);
+		const updates = Object.keys(req.body);
 		const allowable = [ 'fullname', 'phone', 'address', 'email' ];
 		const isValid = updates.every((update) => allowable.includes(update));
 
@@ -109,12 +110,12 @@ module.exports = {
 		}
 		//Send valid data for update
 		try {
-			const updatedUser = request.user;
+			const updatedUser = req.user;
 			if (!updatedUser) {
 				return response.status(400).json({ message: 'User not found!' });
 			}
 
-			updates.forEach((update) => (updatedUser[update] = request.body[update]));
+			updates.forEach((update) => (updatedUser[update] = req.body[update]));
 
 			await updatedUser.save();
 
@@ -123,7 +124,7 @@ module.exports = {
 				updatedUser
 			});
 		} catch (e) {
-			console.log(e);
+			return response.status(500).json({ message: e.message });
 		}
 	}
 };
