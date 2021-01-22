@@ -5,7 +5,8 @@ const generateAuthToken = async function (user) {
   const token = jwt.sign({
      _id: user._id.toString(), 
      fullname: user.fullname, 
-     username: user.username
+     username: user.username,
+     profilePicture: user.profilePicture
     }, process.env.SECRET, { expiresIn: '1 Day'} );
   user.tokens = user.tokens.concat({ token });
 
