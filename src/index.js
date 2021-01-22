@@ -7,6 +7,7 @@ const cors = require('cors');
 const router = require('./routers/index');
 const User = require('./routers/user');
 const Post = require('./routers/post');
+const Like = require('./routers/like');
 const chalk = require('chalk');
 
 dotenv.config();
@@ -14,19 +15,19 @@ dotenv.config();
 const app = express();
 
 app.use(logger('dev'));
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
 app.use(express.json()); //Used to parse JSON bodies
-// app.use(
-// 	bodyParser.urlencoded({
-// 		extended: true
-// 	})
-// );
-app.use(express.urlencoded()); //Parse URL-encoded bodies
+app.use(
+	bodyParser.urlencoded({
+		extended: true
+	})
+);
+// app.use(express.urlencoded()); //Parse URL-encoded bodies
 
 app.use(cors());
 
 // app.use('/', router);
-app.use('/v1.0/api', [ User, Post ]);
+app.use('/v1.0/api', [ User, Post, Like ]);
 
 mongoose.connect(
 	process.env.DATABASE_URL,

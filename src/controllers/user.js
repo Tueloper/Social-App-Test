@@ -1,6 +1,7 @@
 const User = require('./../models/user');
 const generateAuthToken = require('./../utils/generateToken');
 const { hash, compareHash } = require('./../utils/hash');
+const { successResponse, errorResponse } = require('./../utils/toolbox');
 const { cloudinaryImage, destroyCloudinaryImage } = require('./../services/Cloudinary');
 
 module.exports = {
@@ -20,7 +21,6 @@ module.exports = {
 			});
 			const token = await generateAuthToken(user);
 			await hash(user);
-
 			await user.save();
 			response.cookie('token', token, { maxAge: 70000000, httpOnly: true });
 			return response.header('x-auth-token', token).status(201).json({ message: 'Success', user });
@@ -31,8 +31,8 @@ module.exports = {
 
 	async loginUser(request, response) {
 		try {
-      console.log(request.body);
-      return request.body;
+      // console.log(request.body);
+      // return request.body;
 			const { email, password } = request.body;
 			const user = await User.findOne({ email });
 			if (!user) {
@@ -93,7 +93,7 @@ module.exports = {
 				return response.status(201).send({ updatedUser });
 			}
 		} catch (err) {
-			return response.status(err.status).json({ message: err.message });
+			return response.status(500).json({ message: err.message });
 		}
 	},
 
@@ -123,7 +123,7 @@ module.exports = {
 				updatedUser
 			});
 		} catch (e) {
-			console.log(e);
+			return response.status(500).json({ message: e.message });
 		}
 	}
 };

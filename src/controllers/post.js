@@ -1,11 +1,5 @@
 const Post = require('../models/post');
-const {
-	sendOrderNotification,
-	sendProcessingNotification,
-	sendDeliveredNotification,
-	sendUserOrderNotification,
-	orderComplete
-} = require('./../services/EmailSender');
+
 
 module.exports = {
 	//simple testing router
@@ -19,7 +13,7 @@ module.exports = {
 				publishedBy: user.fullname
 			});
 			post = await post.save();
-			response.status(201).json({ post });
+			response.status(201).send({ message:"Post added successfully", post });
 		} catch (err) {
 			response.status(400).send(err);
 		}
@@ -114,7 +108,7 @@ module.exports = {
 				return response.status(404).send({ message: 'Post does not exist' });
 			}
 
-			response.json(deletedPost);
+			response.send({ message: "Post deleted Successfully", deletedPost });
 		} catch (e) {
 			response.status(500).send(e);
 		}
