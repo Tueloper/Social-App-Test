@@ -31,8 +31,6 @@ module.exports = {
 
 	async loginUser(request, response) {
 		try {
-      // console.log(request.body);
-      // return request.body;
 			const { email, password } = request.body;
 			const user = await User.findOne({ email });
 			if (!user) {
