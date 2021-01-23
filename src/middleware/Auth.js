@@ -6,10 +6,10 @@ const auth = async (req, res, next) => {
 	try {
 		// if (!req.headers['cookie']) return res.status(401).send('Access denied. No token provided.');
 		const token = 
-		req.headers['cookie'].split('=')[1] ||
-		req.header('Authorization').replace('Bearer ', '') ||
-		req.headers['x-access-token'] ||
-		res.headers['x-auth-token'];
+		req.headers['cookie']?.split('=')[1] ||
+		req.header('Authorization')?.replace('Bearer ', '') ||
+		req?.headers['x-access-token'] ||
+		req.headers['x-auth-token'];
 		console.log(token);
 		if (!token) return res.status(401).send('Access denied. No token provided.');
 		const decoded = jwt.verify(token, process.env.SECRET);
