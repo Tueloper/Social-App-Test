@@ -8,15 +8,19 @@ const postSchema = mongoose.Schema(
 		},
 		views: {
 			type: Number,
-			trim: true
+			trim: true,
+      required: false,
+      default: 0
 		},
-		publishedBy: {
-			type: String,
-			trim: true
+		published: {
+			type: Boolean,
+      required: false,
+      default:true
 		},
 		imageUrl: {
 			type: String,
-			trim: true
+			trim: true,
+			required: false,
 		},
 		user_id: {
 			type: mongoose.Schema.Types.ObjectId,
@@ -42,5 +46,5 @@ postSchema.virtual('likes', {
 	foreignField: 'post_id'
 });
 
-const Post = mongoose.model('orderTable', postSchema);
+const Post = mongoose.model('postTable', postSchema);
 module.exports = Post;

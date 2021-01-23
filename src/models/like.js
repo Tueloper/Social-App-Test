@@ -6,7 +6,7 @@ const likeSchema = mongoose.Schema(
 			type: mongoose.Schema.Types.ObjectId,
 			trim: true,
 			required: true,
-			ref: 'orderTable'
+			ref: 'postTable'
 		},
 		user_id: {
 			type: mongoose.Schema.Types.ObjectId,

@@ -3,7 +3,7 @@ const Post = require('../models/post');
 
 module.exports = {
 	//simple testing router
-	async CreatePOst(request, response) {
+	async CreatePost(request, response) {
 		try{
 			const user = request.user;
 			let post = new Post({
@@ -30,7 +30,7 @@ module.exports = {
 
 		//Prompt invalid order inputs
 		if (!isValidOrder) {
-			return response.status(404).send(' Error: Invalid Order Input ');
+			return response.status(404).send(' Error: Invalid Inputs ');
 		}
 
 		const _id = request.params.id;
@@ -40,7 +40,7 @@ module.exports = {
 			const user = request.user;
 			const updatedPost = await Post.findOne({ _id, user_id: user._id });
 			if (!updatedPost) {
-				return response.status(404).send('Order not Found');
+				return response.status(404).send('Post not Found');
 			}
 			updates.forEach((update) => (updatedPost[update] = request.body[update]));
 			await updatedPost.save();
@@ -123,10 +123,10 @@ module.exports = {
 			if (!post) {
 				return response.status(404).send('Error: Post Not Found');
 			}
-			post.views = Number(post.views) + 1;
+			post.views = parseInt(post.views, 10) + 1;
 			await post.save();
 			response.status(200).send({
-				Message: 'Post is Gotten successfully',
+				Message: 'Post retrieved successfully',
 				post
 			});
 		} catch (e) {

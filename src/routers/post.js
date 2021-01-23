@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const Auth = require('../middleware/Auth');
 const {
-	CreatePOst,
+	CreatePost,
 	getSinglePost,
 	getAllPost,
 	updatePost,
@@ -10,7 +10,7 @@ const {
 
 const router = Router();
 
-router.post('/post/add', Auth, CreatePOst);
+router.post('/post/add', Auth, CreatePost);
 router.get('/post/', getAllPost);
 router.get('/post/:id', getSinglePost);
 router.patch('/post/update/:id', Auth, updatePost);
