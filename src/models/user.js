@@ -37,7 +37,7 @@ const userSchema = mongoose.Schema(
 
 // using virtual to create a relationship between user and owned directories
 userSchema.virtual('posts', {
-	ref: 'orderTable',
+	ref: 'postTable',
 	localField: '_id',
 	foreignField: 'user_id'
 });

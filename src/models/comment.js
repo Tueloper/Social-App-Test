@@ -8,13 +8,13 @@ const commentSchema = mongoose.Schema(
 		},
 		likes: {
 			type: Number,
-			trim: true
+			trim: false
 		},
 		post_id: {
 			type: mongoose.Schema.Types.ObjectId,
 			trim: true,
 			required: true,
-			ref: 'orderTable'
+			ref: 'postTable'
 		},
 		user_id: {
 			type: mongoose.Schema.Types.ObjectId,
@@ -25,7 +25,7 @@ const commentSchema = mongoose.Schema(
 		comment_id: {
 			type: mongoose.Schema.Types.ObjectId,
 			trim: true,
-			required: true,
+			required: false,
 			ref: 'comment'
 		}
 	},
